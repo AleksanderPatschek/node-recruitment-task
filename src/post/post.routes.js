@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const Post = require('./post.model');
 const PostRepository = require('./post.repository');
+const validationMiddleware = require("../middlewares/validation");
+const PostValidators = require("./post.validators");
 
 router
-  .post('/posts', (req, res) => {
+  .post('/posts', validationMiddleware(PostValidators.postValidator), (req, res, next) => {
     PostRepository.addPost(Post.fromRequestBody(req.body))
                   .then(post => {
                     res
@@ -14,14 +16,10 @@ router
                         payload: post.toJSON()
                       })
                   })
-                  .catch(error => {
-                    res
-                      .status(500)
-                      .json({ error });
-                  })
+                  .catch(error => next(error))
   })
 
-  .get('/posts', (req, res) => {
+  .get('/posts', (req, res, next) => {
     PostRepository.getPosts()
                   .then((posts) => {
                     res
@@ -30,14 +28,10 @@ router
                         payload: posts
                       })
                   })
-                  .catch(error => {
-                    res
-                      .status(500)
-                      .json({ error });
-                  })
+                  .catch(error => next(error))
   })
 
-  .get('/posts/:postId', (req, res) => {
+  .get('/posts/:postId', (req, res, next) => {
     PostRepository.getPostById(req.params.postId)
                   .then((post) => {
                     res
@@ -46,25 +40,17 @@ router
                         payload: post.toJSON()
                       })
                   })
-                  .catch(error => {
-                    res
-                      .status(500)
-                      .json({ error });
-                  })
+                  .catch(error => next(error))
   })
 
-  .delete('/posts/:postId', (req, res) => {
+  .delete('/posts/:postId', (req, res, next) => {
     PostRepository.removePost(req.params.postId)
                   .then(() => {
                     res
                       .status(204)
                       .send();
                   })
-                  .catch(error => {
-                    res
-                      .status(500)
-                      .json({ error });
-                  })
+                  .catch(error => next(error))
   });
 
 module.exports = router;

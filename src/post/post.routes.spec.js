@@ -34,6 +34,30 @@ describe('App', () => {
       })
   });
 
+  it('return 404 if post dont contain title', (done) => {
+    request(app)
+      .post('/posts')
+      .send({
+        content: 'some content'
+      })
+      .end((err, res) => {
+        expect(res.status).toEqual(400);
+        done();
+      })
+  });
+
+  it('return 404 if post dont contain content', (done) => {
+    request(app)
+      .post('/posts')
+      .send({
+        title: 'some title'
+      })
+      .end((err, res) => {
+        expect(res.status).toEqual(400);
+        done();
+      })
+  });
+
   it('gets post if exist', (done) => {
     insertDataToArray();
     request(app)

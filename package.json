@@ -15,6 +15,7 @@
   "homepage": "https://bitbucket.org/thesoftwarehouse/node-recruitement-example#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "joi": "^13.3.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
