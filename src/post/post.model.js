@@ -1,4 +1,4 @@
-const { v4 } = require('uuid');
+const {v4} = require('uuid');
 
 class Post {
   constructor(id, title, content) {
